@@ -1300,6 +1300,9 @@ impl TextDrawer {
     }
 
     fn draw(&self, mergewires: bool, fold: usize) -> String {
+        if self.wires.is_empty() {
+            return String::new();
+        }
         // Calculate the layer ranges for each fold of the circuit
         let num_layers = self.wires[0].len();
         // We skip the first (inputs) layer since it's printed for each fold, regardless
@@ -1517,6 +1520,11 @@ pub fn format_float_pi(f: f64) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn test_empty_circuit_panic() {
+        let circuit = CircuitData::with_capacity(0, 0, 0, crate::operations::Param::Float(0.0)).unwrap();
+        let _ = draw_circuit(&circuit, false, false, None);
+    }
     use ndarray::Array2;
     use smallvec::smallvec;
     use std::f64::consts::PI;
